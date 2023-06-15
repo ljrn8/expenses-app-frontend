@@ -1,29 +1,27 @@
-import logo from "./logo.svg";
-import "./App.css";
+import Verification from "./components/Verification.js";
 
-function App() {
-  fetch(`/customers`).then((res) => {
-    console.log(res.json());
-  });
+export default function App() {
 
-  return (
+  let elisa = {
+    userName: "elisa",
+    password: "elisa123",
+  }
+
+  // add someone
+  fetch("http://localhost:8080/customers", {
+      method: "post",
+      body: JSON.stringify(elisa)
+  }).then(res => res.json()).then(res => console.log(res)); 
+
+  // get all
+  fetch("http://localhost:8080/customers", {
+      method: "get"
+      // body: JSON.stringify(ob)
+  }).then(res => res.json()).then(res => console.log(res)); 
+
+  return (  
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Verification />
     </div>
   );
-}
-
-export default App;
+} 
