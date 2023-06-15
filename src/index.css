@@ -11,3 +11,37 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+:root {
+  --background-colour: rgb(22, 22, 22);
+  --foreground-colour: white;
+  background-color: var(--background-colour);
+  color: var(--foreground-colour);
+}
+
+body {
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.Verification form {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+form input, button {
+  padding: 10px;
+  border-radius: 3px;
+  border-style: hidden;
+  text-align: center;
+  background-color: var(--background-colour);
+  color: var(--foreground-colour);  
+}
+
+form input[type=submit], button {
+  background-color: var(--foreground-colour);
+  color: var(--background-colour);
+}
