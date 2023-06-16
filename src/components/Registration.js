@@ -1,34 +1,34 @@
 import React from "react";
 import { useState } from "react";
-import { getCustomer } from "../api/Customers";
+import { addCustomer, getCustomer } from "../api/Customers";
 
-export default function Verification() {
+export default function Registration() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [denied, setDenied] = useState(null);
 
   function handleSubmit(e) {
     e.preventDefault();
-
     getCustomer(username)
       .then((customer) => {
-        if (customer.password === password) {
-          window.location.href = `/portal/${username}`;
-        } else {
-          setDenied("invalid password");
-        }
+        setDenied("this username is taken");
       })
       .catch((e) => {
-        // TODO bad coding -> exists request
-        setDenied("username not found");
+        // TODO check specific error code / add 'exists' mapping to avoid bad coding
+        addCustomer({
+          userName: username,
+          password: password,
+        }).catch((e) => console("something went wrong adding new user: ", e));
+        window.location.href = "/success";
       });
   }
 
   return (
-    <div className="Verification">
+    <div className="Registration">
       <form onSubmit={handleSubmit}>
         <label>
-          <h1>Log In</h1>
+          <h1>Registration</h1> <br />
+          set your username and password
         </label>
         <br />
         <input
@@ -52,9 +52,9 @@ export default function Verification() {
         <br />
         <button
           id="registration-button"
-          onClick={() => (window.location.href = "/registration")}
+          onClick={() => (window.location.href = "/")}
         >
-          Create an account
+          Back to login
         </button>
       </form>
     </div>

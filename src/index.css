@@ -26,7 +26,7 @@ body {
   align-items: center;
 }
 
-.Verification form {
+.Verification form, .Registration form {
   display: flex;
   flex-direction: column;
   text-align: center;

@@ -1,14 +1,54 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import App from "./App";
+
 import reportWebVitals from "./reportWebVitals";
+import Verification from "./components/Verification";
+import Registration from "./components/Registration";
+import ErrorPage from "./components/ErrorPage";
+import Success from "./components/Success";
+// import App from "./App";
+import Portal, { loader as portalLoader } from "./components/Portal";
 // import 'bootstrap/dist/css/bootstrap/min/css';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+
+/**
+ * TODO's
+ * children routers
+ * proper contacting
+ * fix ./mvnw perms
+ */
+
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Verification />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/registration",
+    element: <Registration />
+  },
+  {
+    path: "/success",
+    element: <Success />
+  },
+  {
+    path: "/portal/:username",
+    element: <Portal />,
+    loader: portalLoader
+  },
+]);
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 
