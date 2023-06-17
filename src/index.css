@@ -14,7 +14,7 @@ code {
 
 :root {
   --background-colour: rgb(22, 22, 22);
-  --foreground-colour: white;
+  --foreground-colour: rgb(255, 255, 255);
   background-color: var(--background-colour);
   color: var(--foreground-colour);
 }
@@ -26,10 +26,28 @@ body {
   align-items: center;
 }
 
-.Verification form, .Registration form {
+.Verification form, .Registration form, .Portal {
   display: flex;
   flex-direction: column;
   text-align: center;
+}
+
+.Portal {
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: column;
+}
+
+#Portal-Page {
+  text-align: center;
+}
+
+.Counter {
+  display: flex;
+  height: 50px;
+  width: 300px;
+  flex-direction: row;
+  align-items: center;
 }
 
 form input, button {
@@ -44,4 +62,6 @@ form input, button {
 form input[type=submit], button {
   background-color: var(--foreground-colour);
   color: var(--background-colour);
+  cursor: pointer;
 }
+

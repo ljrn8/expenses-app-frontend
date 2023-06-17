@@ -10,18 +10,18 @@ import Success from "./components/Success";
 // import App from "./App";
 import Portal, { loader as portalLoader } from "./components/Portal";
 // import 'bootstrap/dist/css/bootstrap/min/css';
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 /**
  * TODO's
  * children routers
  * proper contacting
+ * make 'exists' port
+ * better styling
+ * replace error catching
+ * portal refresh
  * fix ./mvnw perms
  */
-
 
 const router = createBrowserRouter([
   {
@@ -31,19 +31,18 @@ const router = createBrowserRouter([
   },
   {
     path: "/registration",
-    element: <Registration />
+    element: <Registration />,
   },
   {
     path: "/success",
-    element: <Success />
+    element: <Success />,
   },
   {
     path: "/portal/:username",
     element: <Portal />,
-    loader: portalLoader
+    loader: portalLoader,
   },
 ]);
-
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
