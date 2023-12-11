@@ -1,8 +1,9 @@
 import React from "react";
 import { useState } from "react";
-import { getCustomer } from "../api/Customers";
+import { getCustomer, request } from "../api/Customers";
 
 export default function Verification() {
+  
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [denied, setDenied] = useState(null);
@@ -10,10 +11,10 @@ export default function Verification() {
   function handleSubmit(e) {
     e.preventDefault();
 
-    getCustomer(username)
+    getCustomer(username) // this is where the request is made
       .then((customer) => {
         if (customer.password === password) {
-          window.location.href = `/portal/${username}`;
+          window.location.href = `/portal/${username}`; // use token here
         } else {
           setDenied("invalid password");
         }

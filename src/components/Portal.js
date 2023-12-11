@@ -49,7 +49,7 @@ export default function Portal() {
 
     updatePurchases(customer.userName, newPurchases).catch((e) =>
       console.log(
-        "something when wrong making the purchase, ",
+        "something went wrong making the purchase, ",
         purchases,
         "see:",
         e
@@ -59,6 +59,12 @@ export default function Portal() {
     window.location.href = window.location.pathname;
   }
 
+  let emoji = {
+    "apples": "🍎", 
+    "bananas": "🍌",
+    "oranges": "🍊",
+  };
+
   return (
     <div id="Portal-Page">
       <h1>Hello {customer.userName}, view and make purchases below</h1>
@@ -66,8 +72,8 @@ export default function Portal() {
       <h3>
         The current purchases for your account are:
         {Object.entries(customer.purchases).map(([item, amount]) => (
-          <div key={item} style={{ fontStyle: "italic" }}>
-            {item}: {amount} <br />
+          <div key={item} style={{ fontStyle: "revert", fontWeight: "lighter"}}>
+            {item + " " + emoji[item]}: {amount} <br />
           </div>
         ))}
       </h3>
@@ -79,7 +85,7 @@ export default function Portal() {
         ))}
       </div>
       <button onClick={makePurchase} style={{ marginTop: "15vh" }}>
-        make purchase
+        Make Purchase
       </button>
       <br />
       <br />
