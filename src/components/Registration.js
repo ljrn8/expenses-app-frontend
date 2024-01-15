@@ -14,7 +14,6 @@ export default function Registration() {
         setDenied("this username is taken");
       })
       .catch((e) => {
-        // TODO check specific error code / add 'exists' mapping to avoid bad coding
         addCustomer({
           userName: username,
           password: password,
