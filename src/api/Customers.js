@@ -23,6 +23,21 @@ export async function updatePurchases(userName, newPurchases) {
   return res.data;
 }
 
+export async function loginAndAskForJWT(username, password) {
+  let response = await fetch('http://localhost:8080/verification', { 
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ username, password }),
+  });
+  if (!response.ok) {
+      throw new Error('Invalid credentials');
+  }
+  // Receive and store the JWT token
+  return await response.json();
+}
+
 // generalized request
 export async function request(method, url, data) {
   return axios({
