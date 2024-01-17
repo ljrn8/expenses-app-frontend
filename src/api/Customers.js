@@ -3,6 +3,11 @@ import axios from "axios";
 
 axios.defaults.baseURL = 'http://localhost:8080'
 
+
+
+// TODO throw jwts in auth header of all requests except reg
+
+
 const api = axios.create({
   baseURL: "http://localhost:8080",
   headers: { "ngrok-skip-browser-warner": "true" },
@@ -14,12 +19,12 @@ export async function getCustomer(username) {
 }
 
 export async function addCustomer(customer) {
-  const res = await api.post("/customers", customer);
+  const res = await api.post("/registration", customer);
   return res;
 }
 
-export async function updatePurchases(userName, newPurchases) {
-  const res = await api.put(`/customers/${userName}`, newPurchases);
+export async function updatePurchases(newPurchases) {
+  const res = await api.put(`/customers/me`, newPurchases);
   return res.data;
 }
 
