@@ -1,11 +1,12 @@
 import React from "react";
 import { useLoaderData } from "react-router-dom";
-import { getCustomer } from "../api/Customers";
+import { getCustomer, getMyCustomerObject } from "../api/Customers";
 import { useState, useEffect } from "react";
 import { updatePurchases } from "../api/Customers";
+import { setJWTToCookie } from "../App";
 
 // get path parameter from router
-export const loader = ({ params }) => getCustomer(params.username);
+export const loader = ({ params }) => getMyCustomerObject();
 
 export default function Portal() {
   const customer = useLoaderData();
@@ -47,16 +48,21 @@ export default function Portal() {
 
     console.log("putting: ", newPurchases);
 
-    updatePurchases(customer.userName, newPurchases).catch((e) =>
-      console.log(
-        "something went wrong making the purchase, ",
-        purchases,
-        "see:",
-        e
-      )
-    );
+    updatePurchases(newPurchases).then(res => {
+      if (res.status === 401) {
+        console.log("udpateing returned 401, removing jwt and returning to login");
+        setJWTToCookie("");
+        window.location.href = "/";
+      } else if (res.status === 200) {
+        console.log("customer successfully updated, new details are: ", res.data);
+      } else {
+        throw new Error("unexpected response code: ", res.status);
+      }
+    })
+
     // reload the page (is this how you do it?)
-    window.location.href = window.location.pathname;
+    // window.location.href = window.location.pathname;
+    window.location.reload();
   }
 
   let emoji = {

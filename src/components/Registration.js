@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { addCustomer, getCustomer } from "../api/Customers";
+import { registerUser } from "../api/Customers";
 
 export default function Registration() {
   const [username, setUsername] = useState("");
@@ -9,17 +9,29 @@ export default function Registration() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    getCustomer(username)
-      .then((customer) => {
-        setDenied("this username is taken");
+
+    registerUser(username, password)
+      .then((res) => {
+        if (res.status === 409) {
+          setDenied("this username is taken");
+        } else if (res.status === 200) {
+          window.location.href = "/success";
+        } else {
+          throw new Error("got unexpeced status code for registration: ", res.status);
+        }
       })
-      .catch((e) => {
-        addCustomer({
-          userName: username,
-          password: password,
-        }).catch((e) => console("something went wrong adding new user: ", e));
-        window.location.href = "/success";
-      });
+
+    // getCustomer(username)
+    //   .then((customer) => {
+    //     setDenied("this username is taken");
+    //   })
+    //   .catch((e) => {
+    //     addCustomer({
+    //       userName: username,
+    //       password: password,
+    //     }).catch((e) => console("something went wrong adding new user: ", e));
+    //     window.location.href = "/success";
+    //   });
   }
 
   return (

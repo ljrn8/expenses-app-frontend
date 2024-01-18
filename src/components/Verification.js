@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { getCustomer, request, loginAndAskForJWT } from "../api/Customers";
+import { setJWTToCookie } from "../App";
 
 export default function Verification() {
   
@@ -13,9 +14,21 @@ export default function Verification() {
     e.preventDefault();
 
     try {
-      let data = askForJWT(username, password);
-      onLogin(data.token); // TODO use token for login (?)
-
+      loginAndAskForJWT(username, password).then(res => {
+        if (res.status === 401) {
+          console.log("username or password was incorrect: [" + username + " " + password);
+          setDenied("username or password was incorrect");
+        } else {
+          const jwt = res.headers.Authorization;
+          if (jwt.startsWith('Bearer ')) {
+            jwt = jwt.slice(7);
+            // const decoded = jwt.verify(token, 'your_secret_key');
+            setJWTToCookie(jwt);
+            window.location.href = `/portal/${username}`;
+          }
+        }
+      });
+      
     } catch (error) {
         console.error('Login failed:', error.message);
     }
