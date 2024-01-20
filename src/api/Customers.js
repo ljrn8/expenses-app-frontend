@@ -1,10 +1,9 @@
 import React from 'react'
 import axios from "axios";
-import { getJWTFromCookie } from '../App';
+import { getJWTFromCookie, isAuthenticated } from '../App';
 
 axios.defaults.baseURL = 'http://localhost:8080'
 
-// TODO not even using axios?
 const api = axios.create({
   baseURL: "http://localhost:8080",
   headers: { "ngrok-skip-browser-warner": "true" },
@@ -25,64 +24,46 @@ const api = axios.create({
 //   return res.data;
 // }
 
-// TODO literally duplicate fucntions
+const PORT = '8080'
+const BASE_URI = 'http://localhost:' + PORT
 
 export async function loginAndAskForJWT(username, password) {
-  // TODO make const PORT and APIURL
-  let response = await fetch('http://localhost:8080/verification', { 
-    method: 'POST',
-    mode: "cors",
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ username, password }),
-  });
-  if (!response.ok) {
-      throw new Error('Invalid credentials');
+  let response = request('POST', '/verification', JSON.stringify({ username, password}));
+  if (response === null) {
+    throw new Error("server did not respond");
   }
-  return await response.json(); 
+  return await response;
 }
 
 export async function registerUser(username, password) {
-  let response = await fetch('http://localhost:8080/registration', { 
-    method: 'POST',
-    mode: "cors",  
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ username, password }),
-  });
+  let response = request('POST', '/register', JSON.stringify({ username, password}));
   return await response.json(); 
 }
 
 export async function getMyCustomerObject() {
-  let response = await fetch('http://localhost:8080/customers/me', {
-    method: 'GET',
-    mode: "cors",  
-    headers: {
-      "Authorization": 'Bearer ' + getJWTFromCookie(),
-      'Content-Type': 'application/json'
-    }
-  });
+  let response = request('GET', '/customers/me');
   return await response.json();
 }
 
 export async function updatePurchases(newPurchases) {
-  let response = await fetch('http://localhost:8080/customers/me/purchases', {
-    method: 'POST',
-    mode: "cors",  
-    headers: {
-      "Authorization": 'Bearer ' + getJWTFromCookie(),
-      'Content-Type': 'application/json'
-    },
-    body: newPurchases
-  });
+  let response = request('POST', '/customers/me/purchases', newPurchases);
   return await response.json();
 } 
 
-// generalized request
-// TODO use just this in all requests
-export async function request(method, url, data) {
+export async function request(method, resource, data = null) {
+  return await fetch(BASE_URI + resource, {
+    method: method,
+    // mode: "no-cors",  
+    headers: {
+      "Authorization": isAuthenticated() ? 'Bearer ' + getJWTFromCookie() : "",
+      'Content-Type': 'application/json'
+    },
+    body: data
+  })
+}
+
+// TODO use axios api instead
+export async function axiosRequest(method, url, data) {
   return axios({
     method: method,
     url:url,

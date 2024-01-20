@@ -30,7 +30,7 @@ export function getJWTFromCookie() {
     return Cookies.get('token');
 }
 
-const isAuthenticated = () => {
+export const isAuthenticated = () => {
     const jwt = Cookies.get('token');
     if (!jwt) {
       return false;
@@ -62,7 +62,7 @@ export default function App() {
     };
 
     const router = createBrowserRouter([
-    {   
+        {   
             path: "/",
             element: <Verification />,
             errorElement: <ErrorPage />,

@@ -18,8 +18,17 @@ export default function Verification() {
         if (res.status === 401) {
           console.log("username or password was incorrect: [" + username + " " + password);
           setDenied("username or password was incorrect");
+
+        } else if (res.status !== 200) {
+          throw new Error("got unexpected error code from server: ", res);
+          
         } else {
-          const jwt = res.headers.Authorization;
+          console.log("headers .. ");
+          res.headers.forEach((header) => console.log("\t" + header));
+          console.log("body: ", res.text());
+          let jwt = res.headers.Authorization;
+          console.log("jwt: " + jwt);
+
           if (jwt.startsWith('Bearer ')) {
             jwt = jwt.slice(7);
             // const decoded = jwt.verify(token, 'your_secret_key');
@@ -32,19 +41,6 @@ export default function Verification() {
     } catch (error) {
         console.error('Login failed:', error.message);
     }
-
-    // getCustomer(username) // this is where the request is made
-    //   .then((customer) => {
-    //     if (customer.password === password) {
-    //       window.location.href = `/portal/${username}`; // use token here
-    //     } else {
-    //       setDenied("invalid password");
-    //     }
-    //   })
-    //   .catch((e) => {
-    //     // TODO bad coding -> exists request
-    //     setDenied("username not found");
-    //   });
 
 
   }
