@@ -9,7 +9,9 @@ import { setJWTToCookie } from "../App";
 export const loader = ({ params }) => getMyCustomerObject();
 
 export default function Portal() {
+  
   const customer = useLoaderData();
+
   const [purchases, setPurchases] = useState({
     apples: 0,
     bananas: 0,

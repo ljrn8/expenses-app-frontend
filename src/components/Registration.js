@@ -9,7 +9,6 @@ export default function Registration() {
 
   function handleSubmit(e) {
     e.preventDefault();
-
     registerUser(username, password)
       .then((res) => {
         if (res.status === 409) {

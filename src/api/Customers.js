@@ -29,9 +29,6 @@ const BASE_URI = 'http://localhost:' + PORT
 
 export async function loginAndAskForJWT(username, password) {
   let response = request('POST', '/verification', JSON.stringify({ username, password}));
-  if (response === null) {
-    throw new Error("server did not respond");
-  }
   return await response;
 }
 
@@ -42,7 +39,7 @@ export async function registerUser(username, password) {
 
 export async function getMyCustomerObject() {
   let response = request('GET', '/customers/me');
-  return await response.json();
+  return (await response).json();
 }
 
 export async function updatePurchases(newPurchases) {

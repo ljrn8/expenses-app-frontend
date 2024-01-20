@@ -14,7 +14,7 @@ export default function Verification() {
     e.preventDefault();
 
     try {
-      loginAndAskForJWT(username, password).then(res => {
+      loginAndAskForJWT(username, password).then(async res => {
         if (res.status === 401) {
           console.log("username or password was incorrect: [" + username + " " + password);
           setDenied("username or password was incorrect");
@@ -23,14 +23,11 @@ export default function Verification() {
           throw new Error("got unexpected error code from server: ", res);
           
         } else {
-          console.log("headers .. ");
-          res.headers.forEach((header) => console.log("\t" + header));
-          console.log("body: ", res.text());
-          let jwt = res.headers.Authorization;
-          console.log("jwt: " + jwt);
-
+          let jwt = await res.text();
           if (jwt.startsWith('Bearer ')) {
             jwt = jwt.slice(7);
+            console.log("jwt: " + jwt);
+
             // const decoded = jwt.verify(token, 'your_secret_key');
             setJWTToCookie(jwt);
             window.location.href = `/portal/${username}`;

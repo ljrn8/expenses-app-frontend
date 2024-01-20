@@ -21,9 +21,13 @@ import Cookies from 'js-cookie';
  */
 
 export function setJWTToCookie(jwt) {
-    jwt !== null && !jwt.equals("") ? Cookies.set('token', jwt, { expires: 7, secure: true })
-        : console.log("warning: attempt to set empty token");
-    window.location.reload();
+    if (jwt !== null && !(jwt === "")) { 
+        Cookies.set('token', jwt, { expires: 7, secure: true })
+        console.log("cookie: " + Cookies.get('token') + ", set with jwt", + jwt);
+    } else {
+        console.log("warning: attempt to set empty token");
+    } 
+    // window.location.reload();
 }
 
 export function getJWTFromCookie() {
@@ -54,10 +58,12 @@ export default function App() {
 
     const PrivateRoute = ({ element: Element, ...rest }) => {
         return (
-            <Route
-            {...rest}
-            element={isAuthenticated() ? <Element /> : <Navigate to="/login" />}
-            />
+            <Routes>
+                <Route
+                {...rest}
+                element={isAuthenticated() ? <Element /> : <Navigate to="/login" />}
+                />
+            </Routes>
         );
     };
 
@@ -76,7 +82,7 @@ export default function App() {
             element: <Success />,
         },
         {
-            path: "/portal/:username",
+            path: "/portal/:username/*",
             element: <PrivateRoute element={<Portal />} />,
             loader: portalLoader,
         },
