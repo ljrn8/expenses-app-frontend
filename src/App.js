@@ -56,17 +56,6 @@ export const isAuthenticated = () => {
 
 export default function App() {
 
-    const PrivateRoute = ({ element: Element, ...rest }) => {
-        return (
-            <Routes>
-                <Route
-                {...rest}
-                element={isAuthenticated() ? <Element /> : <Navigate to="/login" />}
-                />
-            </Routes>
-        );
-    };
-
     const router = createBrowserRouter([
         {   
             path: "/",
@@ -83,13 +72,13 @@ export default function App() {
         },
         {
             path: "/portal/:username/*",
-            element: <PrivateRoute element={<Portal />} />,
+            element:  isAuthenticated() ? <Portal /> : <Navigate to="/login" />,
             loader: portalLoader,
-        },
+        }
     ]);
 
     return (
         <RouterProvider router={router} />
     );
-};
-  
+
+}

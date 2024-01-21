@@ -33,8 +33,7 @@ export async function loginAndAskForJWT(username, password) {
 }
 
 export async function registerUser(username, password) {
-  let response = request('POST', '/register', JSON.stringify({ username, password}));
-  return await response.json(); 
+  return await request('POST', '/register', JSON.stringify({ username, password}));
 }
 
 export async function getMyCustomerObject() {
@@ -43,14 +42,13 @@ export async function getMyCustomerObject() {
 }
 
 export async function updatePurchases(newPurchases) {
-  let response = request('POST', '/customers/me/purchases', newPurchases);
-  return await response.json();
+  return await request('POST', '/customers/me/purchases', newPurchases);
 } 
 
-export async function request(method, resource, data = null) {
+export async function request(method, resource, data = null, mode = 'cors') {
   return await fetch(BASE_URI + resource, {
     method: method,
-    // mode: "no-cors",  
+    mode: mode,  
     headers: {
       "Authorization": isAuthenticated() ? 'Bearer ' + getJWTFromCookie() : "",
       'Content-Type': 'application/json'

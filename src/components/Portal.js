@@ -12,6 +12,8 @@ export default function Portal() {
   
   const customer = useLoaderData();
 
+  console.log("started portal with this customer: ", customer);
+
   const [purchases, setPurchases] = useState({
     apples: 0,
     bananas: 0,
@@ -51,12 +53,15 @@ export default function Portal() {
     console.log("putting: ", newPurchases);
 
     updatePurchases(newPurchases).then(res => {
+      
       if (res.status === 401) {
-        console.log("udpateing returned 401, removing jwt and returning to login");
+        console.log("updateing returned 401, removing jwt and returning to login");
         setJWTToCookie("");
         window.location.href = "/";
+
       } else if (res.status === 200) {
         console.log("customer successfully updated, new details are: ", res.data);
+      
       } else {
         throw new Error("unexpected response code: ", res.status);
       }
