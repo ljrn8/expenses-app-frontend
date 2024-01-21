@@ -65,15 +65,17 @@ export default function App() {
         {
             path: "/registration",
             element: <Registration />,
+            errorElement: <ErrorPage />
         },
         {
             path: "/success",
             element: <Success />,
         },
         {
-            path: "/portal/:username/*",
+            path: "/portal/user",
             element:  isAuthenticated() ? <Portal /> : <Navigate to="/login" />,
             loader: portalLoader,
+            errorElement: <ErrorPage />
         }
     ]);
 

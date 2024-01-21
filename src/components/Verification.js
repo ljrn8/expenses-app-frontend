@@ -13,33 +13,29 @@ export default function Verification() {
   function handleSubmit(e) {
     e.preventDefault();
 
-    try {
-      loginAndAskForJWT(username, password).then(async res => {
-        if (res.status === 401) {
-          console.log("username or password was incorrect: [" + username + " " + password);
-          setDenied("username or password was incorrect");
+    loginAndAskForJWT(username, password).then(async res => {
+      if (res.status === 401) {
+        console.log("username or password was incorrect: [" + username + " " + password);
+        setDenied("username or password was incorrect");
 
-        } else if (res.status !== 200) {
-          throw new Error("got unexpected error code from server: ", res);
-          
-        } else {
-          let jwt = await res.text();
-          if (jwt.startsWith('Bearer ')) {
-            jwt = jwt.slice(7);
-            console.log("jwt: " + jwt);
+      } else if (res.status !== 200) {
+        throw new Error("got unexpected error code from server: ", res);
+        
+      } else {
+        // reading text body is also async
+        let jwt = await res.text(); 
+        if (jwt.startsWith('Bearer ')) {
+          jwt = jwt.slice(7);
+          console.log("jwt: " + jwt);
 
-            // const decoded = jwt.verify(token, 'your_secret_key');
-            setJWTToCookie(jwt);
-            window.location.href = `/portal/${username}`;
-          }
+          // const decoded = jwt.verify(token, 'your_secret_key');
+          setJWTToCookie(jwt);
+
+          // TODO react change shit
+          window.location.href = `/portal/user`;
         }
-      });
-      
-    } catch (error) {
-        console.error('Login failed:', error.message);
-    }
-
-
+      }
+    });
   }
 
   return (

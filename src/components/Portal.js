@@ -3,10 +3,10 @@ import { useLoaderData } from "react-router-dom";
 import { getCustomer, getMyCustomerObject } from "../api/Customers";
 import { useState, useEffect } from "react";
 import { updatePurchases } from "../api/Customers";
-import { setJWTToCookie } from "../App";
+import { isAuthenticated, setJWTToCookie } from "../App";
 
 // get path parameter from router
-export const loader = ({ params }) => getMyCustomerObject();
+export const loader = ({ params }) =>  isAuthenticated() ? getMyCustomerObject() : null;
 
 export default function Portal() {
   
@@ -53,23 +53,26 @@ export default function Portal() {
     console.log("putting: ", newPurchases);
 
     updatePurchases(newPurchases).then(res => {
-      
       if (res.status === 401) {
-        console.log("updateing returned 401, removing jwt and returning to login");
-        setJWTToCookie("");
-        window.location.href = "/";
+
+        // TODO reset this
+        console.log("updateing returned 401, removing jwt and returning to login (not acutally)");
+        // setJWTToCookie("");
+        // window.location.href = "/";
 
       } else if (res.status === 200) {
         console.log("customer successfully updated, new details are: ", res.data);
+
+        // reload the page (is this how you do it?)
+        // window.location.href = window.location.pathname;
+        window.location.reload();
       
       } else {
         throw new Error("unexpected response code: ", res.status);
       }
     })
 
-    // reload the page (is this how you do it?)
-    // window.location.href = window.location.pathname;
-    window.location.reload();
+    
   }
 
   let emoji = {
@@ -80,7 +83,7 @@ export default function Portal() {
 
   return (
     <div id="Portal-Page">
-      <h1>Hello {customer.userName}, view and make purchases below</h1>
+      <h1>Hello {customer.username}, view and make purchases below</h1>
       <br />
       <h3>
         The current purchases for your account are:

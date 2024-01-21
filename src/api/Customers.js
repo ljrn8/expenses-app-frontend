@@ -28,25 +28,23 @@ const PORT = '8080'
 const BASE_URI = 'http://localhost:' + PORT
 
 export async function loginAndAskForJWT(username, password) {
-  let response = request('POST', '/verification', JSON.stringify({ username, password}));
-  return await response;
+  return request('POST', '/verification', JSON.stringify({ username, password}));
 }
 
 export async function registerUser(username, password) {
-  return await request('POST', '/register', JSON.stringify({ username, password}));
+  return request('POST', '/register', JSON.stringify({ username, password}));
 }
 
 export async function getMyCustomerObject() {
-  let response = request('GET', '/customers/me');
-  return (await response).json();
+  return request('GET', '/customers/me')
 }
 
 export async function updatePurchases(newPurchases) {
-  return await request('POST', '/customers/me/purchases', newPurchases);
+  return request('PUT', '/customers/me/purchases', JSON.stringify(newPurchases));
 } 
 
 export async function request(method, resource, data = null, mode = 'cors') {
-  return await fetch(BASE_URI + resource, {
+  return fetch(BASE_URI + resource, {
     method: method,
     mode: mode,  
     headers: {
@@ -54,6 +52,8 @@ export async function request(method, resource, data = null, mode = 'cors') {
       'Content-Type': 'application/json'
     },
     body: data
+  }).catch(e => {
+    console.log(`server error occured for ${method}, ${resource}: `, e);
   })
 }
 
