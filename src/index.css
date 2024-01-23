@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -17,30 +21,23 @@ code {
   --foreground-colour: rgb(255, 255, 255);
   background-color: var(--background-colour);
   color: var(--foreground-colour);
+  align-items: center;
 }
 
 body {
   display: flex;
   height: 100vh;
   justify-content: center;
-  align-items: center;
 }
 
 .Verification form, .Registration form, .Portal {
+  margin-top: 100%;
   display: flex;
   flex-direction: column;
   text-align: center;
 }
 
-.Portal {
-  align-items: center;
-  justify-content: space-around;
-  flex-direction: column;
-}
 
-#Portal-Page {
-  text-align: center;
-}
 
 .Counter {
   display: flex;
@@ -59,9 +56,26 @@ form input, button {
   color: var(--foreground-colour);  
 }
 
+
+
+/* loading circle TODO make component*/
+
 form input[type=submit], button {
   background-color: var(--foreground-colour);
   color: var(--background-colour);
   cursor: pointer;
 }
 
+#loadingCircle {
+  margin-top: 5vh;
+  align-self: center;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

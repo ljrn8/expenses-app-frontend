@@ -4,6 +4,8 @@ import { getCustomer, getMyCustomerObject } from "../api/Customers";
 import { useState, useEffect } from "react";
 import { updatePurchases } from "../api/Customers";
 import { isAuthenticated, setJWTToCookie } from "../App";
+import ProcessingButton from "./ProcessingButton";
+import LoadingCircle from "./LoadingCircle";
 
 // get path parameter from router
 export const loader = ({ params }) =>  isAuthenticated() ? getMyCustomerObject() : null;
@@ -19,6 +21,8 @@ export default function Portal() {
     bananas: 0,
     oranges: 0,
   });
+  const [loading, setLoading] = useState(false);
+
 
   function purchase(item, amount = 1) {
     let temp = purchases[item] + amount;
@@ -45,6 +49,7 @@ export default function Portal() {
   }
 
   function makePurchase() {
+    setLoading(true);
     const newPurchases = { ...customer.purchases };
     Object.entries(purchases).forEach(([item, amount]) => {
       newPurchases[item] += amount;
@@ -65,6 +70,7 @@ export default function Portal() {
 
         // reload the page (is this how you do it?)
         // window.location.href = window.location.pathname;
+        setLoading(false)
         window.location.reload();
       
       } else {
@@ -82,7 +88,7 @@ export default function Portal() {
   };
 
   return (
-    <div id="Portal-Page">
+    <div>
       <h1>Hello {customer.username}, view and make purchases below</h1>
       <br />
       <h3>
@@ -95,19 +101,26 @@ export default function Portal() {
       </h3>
       <hr />
       <br />
-      <div className="Portal">
+      <div className="Entries">
         {Object.entries(purchases).map(([item, amount]) => (
           <div key={item}>{itemCounter(item)}</div>
         ))}
       </div>
-      <button onClick={makePurchase} style={{ marginTop: "15vh" }}>
-        Make Purchase
-      </button>
+        
+        <ProcessingButton 
+          loading={loading} 
+          onClick={makePurchase} 
+          notification={"making purchase"} 
+          text={"Make Purchase"} />
+
       <br />
       <br />
       <button onClick={() => (window.location.href = "/")}>
         Back to login
       </button>
+
+      {loading && <LoadingCircle />}
+    
     </div>
   );
 }

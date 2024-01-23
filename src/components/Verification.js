@@ -2,6 +2,9 @@ import React from "react";
 import { useState } from "react";
 import { getCustomer, request, loginAndAskForJWT } from "../api/Customers";
 import { setJWTToCookie } from "../App";
+import loading from "./loading.png";
+import LoadingCircle from "./LoadingCircle";
+import ProcessingButton from "./ProcessingButton";
 
 export default function Verification() {
   
@@ -9,14 +12,18 @@ export default function Verification() {
   const [password, setPassword] = useState("");
   const [denied, setDenied] = useState(null);
 
+  const [loading, setLoading] = useState(false);
+
 
   function handleSubmit(e) {
     e.preventDefault();
+    setLoading(true);
 
     loginAndAskForJWT(username, password).then(async res => {
       if (res.status === 401) {
         console.log("username or password was incorrect: [" + username + " " + password);
         setDenied("username or password was incorrect");
+        setLoading(false);
 
       } else if (res.status !== 200) {
         throw new Error("got unexpected error code from server: ", res);
@@ -62,7 +69,9 @@ export default function Verification() {
         {denied && <div style={{ color: "red" }}>{denied}</div>}
         <hr style={{ width: "100%", marginTop: "7vh" }} />
         <br />
-        <input type="submit" />
+
+        <ProcessingButton loading={loading} notification={"Verifying"} />
+
         <br />
         <button
           id="registration-button"
@@ -70,6 +79,8 @@ export default function Verification() {
         >
           Create an account
         </button>
+        { loading && <LoadingCircle />}
+
       </form>
     </div>
   );
