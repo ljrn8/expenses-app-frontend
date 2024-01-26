@@ -10,9 +10,19 @@ import LoadingCircle from "./LoadingCircle";
 // get path parameter from router
 export const loader = ({ params }) =>  isAuthenticated() ? getMyCustomerObject() : null;
 
+function kickUser(customer = null) {
+  console.log("user kicked ", customer ?? "");
+  // setJWTToCookie("");
+  // window.location.href = "/";
+}
+
+
+
 export default function Portal() {
-  
-  const customer = useLoaderData();
+
+  const [customer, setCustomer] = useState(useLoaderData());
+
+  if (customer == null || !isAuthenticated()) kickUser();
 
   console.log("started portal with this customer: ", customer);
 
@@ -22,7 +32,7 @@ export default function Portal() {
     oranges: 0,
   });
   const [loading, setLoading] = useState(false);
-
+  const [message, setMessage] = useState("");
 
   function purchase(item, amount = 1) {
     let temp = purchases[item] + amount;
@@ -32,14 +42,13 @@ export default function Portal() {
 
   function itemCounter(item) {
     return (
-      <div className="Counter">
-        <br />
-        <h1 style={{ marginRight: "20px" }}>
-          {purchases[item]} {item.toUpperCase()}
-        </h1>
+      <div className="Counter" style={{fontSize: "20px", marginBottom: "1vh"}}>
+        <h2 style={{ marginRight: "20px", width: "100px"}}>
+          {purchases[item] + emoji[item]}
+        </h2>
         <button
           onClick={(e) => purchase(item, 1)}
-          style={{ marginRight: "3px" }}
+          style={{ marginRight: "3px"}}
         >
           +
         </button>
@@ -57,21 +66,17 @@ export default function Portal() {
 
     console.log("putting: ", newPurchases);
 
-    updatePurchases(newPurchases).then(res => {
+    updatePurchases(newPurchases).then(async res => {
       if (res.status === 401) {
-
-        // TODO reset this
-        console.log("updateing returned 401, removing jwt and returning to login (not acutally)");
-        // setJWTToCookie("");
-        // window.location.href = "/";
+        console.log("updateing returned 401, removing jwt and returning to login");
+        kickUser(customer)
 
       } else if (res.status === 200) {
-        console.log("customer successfully updated, new details are: ", res.data);
-
-        // reload the page (is this how you do it?)
-        // window.location.href = window.location.pathname;
-        setLoading(false)
-        window.location.reload();
+        let body = await res.json();
+        console.log(body);
+        setCustomer(prevCustomer => ({...prevCustomer, ...body}));
+        setLoading(false);
+        setMessage("successfully updated purchases ✅");
       
       } else {
         throw new Error("unexpected response code: ", res.status);
@@ -88,39 +93,47 @@ export default function Portal() {
   };
 
   return (
-    <div>
-      <h1>Hello {customer.username}, view and make purchases below</h1>
+    <div id="PortalContainer">
+      <h1 style={{marginBottom: "1vh"}}> ⋞ Hello {customer.username} ⋟ </h1>
+      {message ? <h2 style={{color: "#90EE90"}}>{message}</h2> : <h2>view and make purchases below</h2>}
       <br />
+
+
+      <hr style={{ width: "100%", marginBottom: "3vh" }} />
       <h3>
         The current purchases for your account are:
         {Object.entries(customer.purchases).map(([item, amount]) => (
           <div key={item} style={{ fontStyle: "revert", fontWeight: "lighter"}}>
-            {item + " " + emoji[item]}: {amount} <br />
+            {item + " " + emoji[item]} {amount} <br />
           </div>
         ))}
       </h3>
-      <hr />
+      <hr style={{ width: "100%", marginTop: "3vh" }} />
+
       <br />
+
       <div className="Entries">
         {Object.entries(purchases).map(([item, amount]) => (
           <div key={item}>{itemCounter(item)}</div>
         ))}
       </div>
-        
+
+      <br />
+
         <ProcessingButton 
           loading={loading} 
           onClick={makePurchase} 
-          notification={"making purchase"} 
-          text={"Make Purchase"} />
-
-      <br />
+          notification={"Purchasing"} 
+          text={"Make Purchase"}
+          button={true} />
+      
       <br />
       <button onClick={() => (window.location.href = "/")}>
         Back to login
       </button>
 
       {loading && <LoadingCircle />}
-    
+      
     </div>
   );
 }

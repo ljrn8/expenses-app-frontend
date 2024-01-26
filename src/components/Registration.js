@@ -1,14 +1,18 @@
 import React from "react";
 import { useState } from "react";
 import { registerUser } from "../api/Customers";
+import ProcessingButton from "./ProcessingButton";
+import LoadingCircle from "./LoadingCircle";
 
 export default function Registration() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [denied, setDenied] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
+    setLoading(true);
     
     registerUser(username, password)
       .then((res) => {
@@ -32,13 +36,14 @@ export default function Registration() {
     //     }).catch((e) => console("something went wrong adding new user: ", e));
     //     window.location.href = "/success";
     //   });
+    setLoading(false);
   }
 
   return (
     <div className="Registration">
       <form onSubmit={handleSubmit}>
         <label>
-          <h1>Registration</h1> <br />
+          <h1>· • Registration • ·</h1> <br />
           set your username and password
         </label>
         <br />
@@ -59,14 +64,23 @@ export default function Registration() {
         {denied && <div style={{ color: "red" }}>{denied}</div>}
         <hr style={{ width: "100%", marginTop: "7vh" }} />
         <br />
-        <input type="submit" />
+
+        <ProcessingButton 
+          loading={loading} 
+          notification={"making account"}
+          text={"register account"}
+        />
+
         <br />
         <button
           id="registration-button"
-          onClick={() => (window.location.href = "/")}
+          onClick={(e) => {
+            e.preventDefault(); 
+            window.location.href = "/"}}
         >
           Back to login
         </button>
+        {loading && <LoadingCircle />}
       </form>
     </div>
   );

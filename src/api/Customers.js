@@ -36,12 +36,12 @@ export async function registerUser(username, password) {
 }
 
 export async function getMyCustomerObject() {
-  return request('GET', '/customers/me')
+  return request('GET', '/customers/me');
 }
 
 export async function updatePurchases(newPurchases) {
   return request('PUT', '/customers/me/purchases', JSON.stringify(newPurchases));
-} 
+}
 
 export async function request(method, resource, data = null, mode = 'cors') {
   return fetch(BASE_URI + resource, {
@@ -52,9 +52,10 @@ export async function request(method, resource, data = null, mode = 'cors') {
       'Content-Type': 'application/json'
     },
     body: data
-  }).catch(e => {
-    console.log(`server error occured for ${method}, ${resource}: `, e);
-  })
+  });
+  // .catch(e => {
+  //   console.log(`server error occured for ${method}, ${resource}: `, e);
+  // })
 }
 
 // TODO use axios api instead

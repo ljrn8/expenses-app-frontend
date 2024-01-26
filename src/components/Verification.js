@@ -49,7 +49,7 @@ export default function Verification() {
     <div className="Verification">
       <form onSubmit={handleSubmit}>
         <label>
-          <h1>Log In</h1>
+          <h1>∾ Log In ∾</h1>
         </label>
         <br />
         <input
@@ -72,7 +72,9 @@ export default function Verification() {
 
         <ProcessingButton loading={loading} notification={"Verifying"} />
 
+        
         <br />
+        
         <button
           id="registration-button"
           onClick={() => (window.location.href = "/registration")}

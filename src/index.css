@@ -9,6 +9,11 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
 }
 
 code {
@@ -16,54 +21,55 @@ code {
     monospace;
 }
 
+
 :root {
-  --background-colour: rgb(22, 22, 22);
+  --background-colour: rgb(20, 20, 19);
   --foreground-colour: rgb(255, 255, 255);
+  --h1-spacing: 2px;
   background-color: var(--background-colour);
   color: var(--foreground-colour);
   align-items: center;
 }
 
-body {
+.Verification form, .Registration form, #PortalContainer {
   display: flex;
-  height: 100vh;
+  flex-wrap: wrap;
   justify-content: center;
-}
-
-.Verification form, .Registration form, .Portal {
-  margin-top: 100%;
-  display: flex;
+  align-items: center;
   flex-direction: column;
   text-align: center;
+  padding: 5vh;
 }
 
 
 
-.Counter {
+.Entries .Counter {
   display: flex;
-  height: 50px;
-  width: 300px;
-  flex-direction: row;
   align-items: center;
+  justify-content: space-around;
+  text-align: center;
+  flex-wrap: nowrap;
 }
 
 form input, button {
   padding: 10px;
+  width: 100%;
   border-radius: 3px;
-  border-style: hidden;
+  border-style: hidden; 
   text-align: center;
   background-color: var(--background-colour);
   color: var(--foreground-colour);  
 }
 
-
-
-/* loading circle TODO make component*/
-
 form input[type=submit], button {
   background-color: var(--foreground-colour);
   color: var(--background-colour);
   cursor: pointer;
+  transition: opacity 0.3s ease; 
+}
+
+input[type="submit"]:hover, button:hover {
+  opacity: 0.5; 
 }
 
 #loadingCircle {
@@ -71,11 +77,19 @@ form input[type=submit], button {
   align-self: center;
 }
 
-@keyframes spin {
+
+@keyframes pulse {
   from {
-    transform: rotate(0deg);
+    letter-spacing: var(--h1-spacing);
   }
   to {
-    transform: rotate(360deg);
+    letter-spacing: 3px;
   }
+}
+
+
+h1 {
+  font-size: 25px;
+  letter-spacing: var(--h1-spacing);
+  margin-bottom: 5vh;
 }
