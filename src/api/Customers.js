@@ -36,7 +36,7 @@ export async function registerUser(username, password) {
 }
 
 export async function getMyCustomerObject() {
-  return request('GET', '/customers/me');
+  return await request('GET', '/customers/me'); // TODO await ??
 }
 
 export async function updatePurchases(newPurchases) {

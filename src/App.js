@@ -5,8 +5,7 @@ import Success from "./components/Success";
 // import App from "./App";
 import Portal, { loader as portalLoader } from "./components/Portal";
 // import 'bootstrap/dist/css/bootstrap/min/css';
-import { createBrowserRouter, Navigate, Route, RouterProvider, Routes } from "react-router-dom";
-import {useState, useEffect} from "react"
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import Cookies from 'js-cookie';
 
 /**

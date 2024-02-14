@@ -1,8 +1,7 @@
 import React from "react";
 import { useState } from "react";
-import { getCustomer, request, loginAndAskForJWT } from "../api/Customers";
+import { loginAndAskForJWT } from "../api/Customers";
 import { setJWTToCookie } from "../App";
-import loading from "./loading.png";
 import LoadingCircle from "./LoadingCircle";
 import ProcessingButton from "./ProcessingButton";
 

@@ -1,14 +1,14 @@
 import React from "react";
 import { useLoaderData } from "react-router-dom";
-import { getCustomer, getMyCustomerObject } from "../api/Customers";
-import { useState, useEffect } from "react";
+import {  getMyCustomerObject } from "../api/Customers";
+import { useState  } from "react";
 import { updatePurchases } from "../api/Customers";
-import { isAuthenticated, setJWTToCookie } from "../App";
+import { isAuthenticated } from "../App";
 import ProcessingButton from "./ProcessingButton";
 import LoadingCircle from "./LoadingCircle";
 
 // get path parameter from router
-export const loader = ({ params }) =>  isAuthenticated() ? getMyCustomerObject() : null;
+export const loader = ({ params }) => isAuthenticated() ? getMyCustomerObject() : null;
 
 function kickUser(customer = null) {
   console.log("user kicked ", customer ?? "");
@@ -16,15 +16,14 @@ function kickUser(customer = null) {
   // window.location.href = "/";
 }
 
-
-
 export default function Portal() {
 
   const [customer, setCustomer] = useState(useLoaderData());
 
-  if (customer == null || !isAuthenticated()) kickUser();
+  if (customer == null || !isAuthenticated()) kickUser(); 
 
   console.log("started portal with this customer: ", customer);
+  console.log("these purchases where found: " + customer.purchases); // TODO purchases is null ? loader is async ?
 
   const [purchases, setPurchases] = useState({
     apples: 0,
@@ -42,13 +41,13 @@ export default function Portal() {
 
   function itemCounter(item) {
     return (
-      <div className="Counter" style={{fontSize: "20px", marginBottom: "1vh"}}>
-        <h2 style={{ marginRight: "20px", width: "100px"}}>
+      <div className="Counter" style={{ fontSize: "20px", marginBottom: "1vh" }}>
+        <h2 style={{ marginRight: "20px", width: "100px" }}>
           {purchases[item] + emoji[item]}
         </h2>
         <button
           onClick={(e) => purchase(item, 1)}
-          style={{ marginRight: "3px"}}
+          style={{ marginRight: "3px" }}
         >
           +
         </button>
@@ -74,36 +73,34 @@ export default function Portal() {
       } else if (res.status === 200) {
         let body = await res.json();
         console.log(body);
-        setCustomer(prevCustomer => ({...prevCustomer, ...body}));
+        setCustomer(prevCustomer => ({ ...prevCustomer, ...body }));
         setLoading(false);
         setMessage("successfully updated purchases ✅");
-      
+
       } else {
         throw new Error("unexpected response code: ", res.status);
       }
     })
-
-    
   }
 
   let emoji = {
-    "apples": "🍎", 
+    "apples": "🍎",
     "bananas": "🍌",
     "oranges": "🍊",
   };
 
   return (
     <div id="PortalContainer">
-      <h1 style={{marginBottom: "1vh"}}> ⋞ Hello {customer.username} ⋟ </h1>
-      {message ? <h2 style={{color: "#90EE90"}}>{message}</h2> : <h2>view and make purchases below</h2>}
+      <h1 style={{ marginBottom: "1vh" }}> ⋞ Hello {customer.username} ⋟ </h1>
+      {message ? <h2 style={{ color: "#90EE90" }}>{message}</h2> : <h2>view and make purchases below</h2>}
+      
       <br />
-
 
       <hr style={{ width: "100%", marginBottom: "3vh" }} />
       <h3>
         The current purchases for your account are:
         {Object.entries(customer.purchases).map(([item, amount]) => (
-          <div key={item} style={{ fontStyle: "revert", fontWeight: "lighter"}}>
+          <div key={item} style={{ fontStyle: "revert", fontWeight: "lighter" }}>
             {item + " " + emoji[item]} {amount} <br />
           </div>
         ))}
@@ -120,20 +117,19 @@ export default function Portal() {
 
       <br />
 
-        <ProcessingButton 
-          loading={loading} 
-          onClick={makePurchase} 
-          notification={"Purchasing"} 
-          text={"Make Purchase"}
-          button={true} />
-      
+      <ProcessingButton
+        loading={loading}
+        onClick={makePurchase}
+        notification={"Purchasing"}
+        text={"Make Purchase"}
+        button={true} />
+
       <br />
+
       <button onClick={() => (window.location.href = "/")}>
         Back to login
       </button>
-
       {loading && <LoadingCircle />}
-      
     </div>
   );
 }

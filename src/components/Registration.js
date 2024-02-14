@@ -24,18 +24,6 @@ export default function Registration() {
           throw new Error("got unexpeced status code for registration: ", res.status);
         }
       })
-
-    // getCustomer(username)
-    //   .then((customer) => {
-    //     setDenied("this username is taken");
-    //   })
-    //   .catch((e) => {
-    //     addCustomer({
-    //       userName: username,
-    //       password: password,
-    //     }).catch((e) => console("something went wrong adding new user: ", e));
-    //     window.location.href = "/success";
-    //   });
     setLoading(false);
   }
 
@@ -64,13 +52,11 @@ export default function Registration() {
         {denied && <div style={{ color: "red" }}>{denied}</div>}
         <hr style={{ width: "100%", marginTop: "7vh" }} />
         <br />
-
         <ProcessingButton 
           loading={loading} 
           notification={"making account"}
           text={"register account"}
         />
-
         <br />
         <button
           id="registration-button"
