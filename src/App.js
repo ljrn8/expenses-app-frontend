@@ -2,9 +2,7 @@ import Verification from "./components/Verification";
 import Registration from "./components/Registration";
 import ErrorPage from "./components/ErrorPage";
 import Success from "./components/Success";
-// import App from "./App";
 import Portal, { loader as portalLoader } from "./components/Portal";
-// import 'bootstrap/dist/css/bootstrap/min/css';
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import Cookies from 'js-cookie';
 
@@ -30,7 +28,7 @@ export function setJWTToCookie(jwt) {
 }
 
 export function getJWTFromCookie() {
-    return Cookies.get('token');
+    return isAuthenticated() ? Cookies.get('token') : ""
 }
 
 export const isAuthenticated = () => {
@@ -54,7 +52,6 @@ export const isAuthenticated = () => {
   };
 
 export default function App() {
-
     const router = createBrowserRouter([
         {   
             path: "/",
@@ -64,22 +61,21 @@ export default function App() {
         {
             path: "/registration",
             element: <Registration />,
-            errorElement: <ErrorPage />
+            errorElement: <ErrorPage />, 
         },
         {
             path: "/success",
             element: <Success />,
+            errorElement: <ErrorPage />,
         },
         {
             path: "/portal/user",
-            element:  isAuthenticated() ? <Portal /> : <Navigate to="/login" />,
+            element:  isAuthenticated() ? <Portal /> : <Navigate to="/" />,
             loader: portalLoader,
             errorElement: <ErrorPage />
         }
     ]);
-
     return (
         <RouterProvider router={router} />
     );
-
-}
+}   

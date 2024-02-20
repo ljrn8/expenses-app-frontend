@@ -1,5 +1,4 @@
 import React from 'react';
-import LoadingCircle from './LoadingCircle';
 
 export default function ProcessingButton({ loading, notification, text, onClick, button = false }) {
 

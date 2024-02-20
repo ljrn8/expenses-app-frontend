@@ -7,8 +7,9 @@ import { isAuthenticated } from "../App";
 import ProcessingButton from "./ProcessingButton";
 import LoadingCircle from "./LoadingCircle";
 
-// get path parameter from router
-export const loader = ({ params }) => isAuthenticated() ? getMyCustomerObject() : null;
+export async function loader() {
+   return isAuthenticated() ? getMyCustomerObject() : new Error("User was not authenticated during component loading");
+}
 
 function kickUser(customer = null) {
   console.log("user kicked ", customer ?? "");
@@ -90,7 +91,7 @@ export default function Portal() {
   };
 
   return (
-    <div id="PortalContainer">
+    <div id="PortalContainer" data-testid="portal">
       <h1 style={{ marginBottom: "1vh" }}> ⋞ Hello {customer.username} ⋟ </h1>
       {message ? <h2 style={{ color: "#90EE90" }}>{message}</h2> : <h2>view and make purchases below</h2>}
       

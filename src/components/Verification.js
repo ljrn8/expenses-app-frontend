@@ -71,7 +71,6 @@ export default function Verification() {
 
         <ProcessingButton loading={loading} notification={"Verifying"} />
 
-        
         <br />
         
         <button
